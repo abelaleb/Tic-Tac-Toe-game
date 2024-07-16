@@ -11,10 +11,24 @@ function gameBoard() {
     }
   }
   const getBoard = () => board; //getting the entire board
+  const isMoveValid = (column, row) => {
+    if (row < 0 || row >= rows || column < 0 || column >= columns) {
+      return {
+        success: false,
+        message: "Move out of bounds",
+      };
+    }
+    if (board[row][column].getValue() !== 0)
+      return { success: false, message: "Cell already occuiped" }; //Cell already occupied
+    return {success: true, message: "Move is valid"};
+  };
   const dropToken = (column, row, player) => {
-    if(board[row][column].getValue() !== 0) return false; //Cell already occupied
+    const validation = isMoveValid(column, row);
+    if (!validation.success) {
+      return validation;
+    }
     board[row][column].addToken(player);
-    return true;
+    return { success: true, message: "Token added successfully" };
   };
   // To print our board to the console.
   const printBoard = () => {
@@ -63,9 +77,15 @@ function gameController( // This controls the flow and state of the game's turns
   const playRound = (column, row) => {
     //drop a token for the current player
     console.log(
-      `Dropping ${getActivePlayer().name}'s token into column ${column} and row ${row}`
+      `Dropping ${
+        getActivePlayer().name
+      }'s token into column ${column} and row ${row}`
     );
-    board.dropToken(column,row, getActivePlayer().token);
+    const result = board.dropToken(column, row, getActivePlayer().token);
+    if (!result.success) {
+      console.log(result.message);
+      return; //Do not switch player if the move was not successful
+    }
     //Check to find a winner and and win message
     //Switch player turn
     switchPlayerTurn();
