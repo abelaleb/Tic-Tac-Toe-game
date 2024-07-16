@@ -10,15 +10,11 @@ function gameBoard() {
       board[i].push(Cell());
     }
   }
-
   const getBoard = () => board; //getting the entire board
-  const dropToken = (column, player) => {
-    const availableCells = board
-      .filter((row) => row[column].getValue() === 0)
-      .map((row) => row[column]);
-    if (!availableCells.length) return;
-    const lowestRow = availableCells.length - 1;
-    board[lowestRow][column].addToken(player);
+  const dropToken = (column, row, player) => {
+    if(board[row][column].getValue() !== 0) return false; //Cell already occupied
+    board[row][column].addToken(player);
+    return true;
   };
   // To print our board to the console.
   const printBoard = () => {
@@ -64,12 +60,12 @@ function gameController( // This controls the flow and state of the game's turns
     board.printBoard();
     console.log(`${getActivePlayer().name}'s switchPlayerTurn.`);
   };
-  const playRound = (column) => {
+  const playRound = (column, row) => {
     //drop a token for the current player
     console.log(
-      `Dropping ${getActivePlayer().name}'s token into column ${column}...`
+      `Dropping ${getActivePlayer().name}'s token into column ${column} and row ${row}`
     );
-    board.dropToken(column, getActivePlayer().token);
+    board.dropToken(column,row, getActivePlayer().token);
     //Check to find a winner and and win message
     //Switch player turn
     switchPlayerTurn();
