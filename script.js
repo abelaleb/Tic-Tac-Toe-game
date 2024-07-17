@@ -20,7 +20,7 @@ function gameBoard() {
     }
     if (board[row][column].getValue() !== 0)
       return { success: false, message: "Cell already occuiped" }; //Cell already occupied
-    return {success: true, message: "Move is valid"};
+    return { success: true, message: "Move is valid" };
   };
   const dropToken = (column, row, player) => {
     const validation = isMoveValid(column, row);
@@ -37,7 +37,47 @@ function gameBoard() {
     );
     console.log(boardWithCellValues);
   };
-  return { getBoard, dropToken, printBoard };
+  const checkWinner = () => {
+    //Check rows
+    for (let i = 0; i < rows; i++) {
+      if (
+        board[i][0].getValue() !== 0 &&
+        board[i][0].getValue() === board[i][1].getValue() &&
+        board[i][1].getValue() === board[i][2].getValue()
+      ) {
+        return true;
+      }
+    }
+    //Check columns
+    for (let j = 0; j < columns; j++) {
+      if (
+        board[0][j].getValue() !== 0 &&
+        board[0][j].getValue() === board[1][j].getValue() &&
+        board[1][j].getValue() === board[2][j].getValue()
+      ) {
+        return true;
+      }
+    } //Check diagonals
+    if (
+      board[0][0].getValue() !== 0 &&
+      board[0][0].getValue() === board[1][1].getValue() &&
+      board[1][1].getValue() === board[2][2].getValue()
+    ) {
+      return true;
+    }
+    if(
+      board[0][2].getValue() !== 0 &&
+      board[0][2].getValue() === board[1][1].getValue() &&
+      board[1][1].getValue()===board[2][0].getValue()
+    ){
+      return true;
+    }
+    return false;
+  };
+  const isBoardFull = () => {
+    return board.every((row) => row.every(Cell => Cell.getValue() !== 0));
+  };
+  return { getBoard, dropToken, printBoard, checkWinner, isBoardFull };
 }
 function Cell() {
   let value = 0; //Accept a player's token to change the value of the cell
@@ -50,7 +90,7 @@ function Cell() {
     getValue,
   };
 }
-function gameController( // This controls the flow and state of the game's turns, as well as if anybody has won the game.
+function gameController( // Flow and state of the game's turns, as well as if anybody has won the game.
   playerOneName = "player One",
   playerTwoName = "player Two"
 ) {
@@ -75,21 +115,33 @@ function gameController( // This controls the flow and state of the game's turns
     console.log(`${getActivePlayer().name}'s switchPlayerTurn.`);
   };
   const playRound = (column, row) => {
-    //drop a token for the current player
+    //Check winner and win message
+    if (!makeMove(column, row, getActivePlayer())) {
+      return;
+    }
+    if (board.checkWinner()) {
+      console.log(`${getActivePlayer().name} wins!`);
+      return;
+    }
+    if (board.isBoardFull()) {
+      console.log(`It's a draw!`);
+      return;
+    }
+    switchPlayerTurn();
+    printNewRound();
+  };
+  const makeMove = (column, row, player) => {
     console.log(
       `Dropping ${
         getActivePlayer().name
       }'s token into column ${column} and row ${row}`
-    );
+    ); //drop a token for the current player
     const result = board.dropToken(column, row, getActivePlayer().token);
     if (!result.success) {
       console.log(result.message);
-      return; //Do not switch player if the move was not successful
+      return false; //Do not switch player if the move was not successful
     }
-    //Check to find a winner and and win message
-    //Switch player turn
-    switchPlayerTurn();
-    printNewRound();
+    return true;
   };
   printNewRound(); //Initial play game message
   //For the console version we will only use playRound
