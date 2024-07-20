@@ -1,18 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic-Tac-Toe game</title>
-    <script src="/script.js" defer></script>
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Tic Tac Toe</h1>
-        
-        <div class="board">
-        </div>
-    </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe game</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="tic-tac-toe icon" href="tic-tac-toe.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&family=Varela+Round&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Tic Tac Toe</h1>
+    </header>
+    <main class="container">
+      <div class="message" id="message">Player X's turn</div>
+      <div class="board">
+        <div class="field" data-index="0"></div>
+        <div class="field" data-index="1"></div>
+        <div class="field" data-index="2"></div>
+        <div class="field" data-index="3"></div>
+        <div class="field" data-index="4"></div>
+        <div class="field" data-index="5"></div>
+        <div class="field" data-index="6"></div>
+        <div class="field" data-index="7"></div>
+        <div class="field" data-index="8"></div>
+      </div>
+      <div class="center">
+        <button class="restart-button" id="restart-button">Restart</button>
+      </div>
+    </main>
+    <footer class="footer">
+      <p>Copyright © 2024 Abel A.</p>
+      <a href="https://github.com/abelaleb" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+    </footer>
+  </body>
 </html>

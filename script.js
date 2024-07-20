@@ -33,7 +33,9 @@ function gameBoard() {
   // To print our board to the console.
   const printBoard = () => {
     const boardWithCellValues = board.map((row) =>
-      row.map((cell) => cell.getValue())
+      row.map((cell) =>
+        cell.getValue() === 1 ? "X" : cell.getValue() === 2 ? "0" : "-"
+      )
     );
     console.log(boardWithCellValues);
   };
@@ -65,17 +67,17 @@ function gameBoard() {
     ) {
       return true;
     }
-    if(
+    if (
       board[0][2].getValue() !== 0 &&
       board[0][2].getValue() === board[1][1].getValue() &&
-      board[1][1].getValue()===board[2][0].getValue()
-    ){
+      board[1][1].getValue() === board[2][0].getValue()
+    ) {
       return true;
     }
     return false;
   };
   const isBoardFull = () => {
-    return board.every((row) => row.every(Cell => Cell.getValue() !== 0));
+    return board.every((row) => row.every((Cell) => Cell.getValue() !== 0));
   };
   return { getBoard, dropToken, printBoard, checkWinner, isBoardFull };
 }
@@ -151,4 +153,33 @@ function gameController( // Flow and state of the game's turns, as well as if an
     getActivePlayer,
   };
 }
-const game = gameController();
+// const game = gameController();
+function screenController() {
+  const game = gameController();
+  const playerTurnDiv = document.querySelector(".turn");
+  const boardDiv = document.querySelector(".board");
+  const updateScreen = () => {
+    boardDiv.textContent = ""; //clear board
+    const board = game.getBoard(); //new version of the board and player turn
+    const activePlayer = game.getActivePlayer();
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+    board.forEach((row) => {
+      row.forEach((cell, index) => {
+        const cellButton = document.createElement("button");
+        cellButton.classList.add("cell");
+        cellButton.dataset.column = index;
+        cellButton.textContent = cell.getValue();
+        boardDiv.appendChild(cellButton);
+      });
+    });
+  };
+  function clickHandlerBoard(e) {
+    const selectedColumn = e.target.dataset.column; //make sure column is clicked
+    if (!selectedColumn) return;
+    game.playRound(selectedColumn);
+    updateScreen();
+  }
+  boardDiv.addEventListener("click", clickHandlerBoard);
+  updateScreen();
+}
+screenController();
