@@ -102,8 +102,19 @@ function Cell() {
     getValue,
   };
 }
+const declareWinner = (message) => {
+  const winnerMessage = document.getElementById("winner-message");
+  winnerMessage.textContent = message;
 
-function gameController( // Flow and state of the game's turns, as well as if anybody has won the game.
+  const winnerDialog = document.getElementById("winner-dialog");
+  winnerDialog.showModal();
+
+  boardDiv.removeEventListener("click",clickHandlerBoard)
+  disableBoard();
+};
+
+function gameController(
+  declareWinner, // Flow and state of the game's turns, as well as if anybody has won the game.
   playerOneName = "player One",
   playerTwoName = "player Two"
 ) {
@@ -124,7 +135,7 @@ function gameController( // Flow and state of the game's turns, as well as if an
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  const getActivePlayer = () => activePlayer;
+  let getActivePlayer = () => activePlayer;
 
   const playRound = (column, row) => {
     //Check winner and win message
@@ -132,11 +143,11 @@ function gameController( // Flow and state of the game's turns, as well as if an
       return;
     }
     if (board.checkWinner()) {
-      alert(`${getActivePlayer().name} wins!`);
+      declareWinner(`${getActivePlayer().name} wins!`);
       return;
     }
     if (board.isBoardFull()) {
-      alert(`It's a draw!`);
+      declareWinner(`It's a draw!`);
       return;
     }
     switchPlayerTurn();
@@ -145,7 +156,7 @@ function gameController( // Flow and state of the game's turns, as well as if an
   const makeMove = (column, row, player) => {
     const result = board.dropToken(column, row, player.token);
     if (!result.success) {
-      alert(result.message);
+      declareWinner(result.message);
       return false; //Do not switch player if the move was not successful
     }
     return true;
@@ -158,7 +169,7 @@ function gameController( // Flow and state of the game's turns, as well as if an
 }
 
 function screenController() {
-  let game = gameController();
+  let game = gameController(declareWinner);
   const playerTurnDiv = document.querySelector("#message");
   const boardDiv = document.querySelector(".board");
   const restartButton = document.querySelector("#restart-button");
@@ -185,11 +196,31 @@ function screenController() {
     updateScreen();
   };
   const restartGame = () => {
-    game = gameController();
+    game = gameController(declareWinner);
+    enableBoard();
     updateScreen();
+  };
+
+  function closeDialog() {
+    const winnerDialog = document.getElementById("winner-dialog");
+    winnerDialog.close();
+    enableBoard();
+  }
+  const disableBoard = () => {
+    boardDiv.querySelectorAll(".field").forEach((cell) => {
+      cell.style.pointerEvents = "none";
+    });
+  };
+  const enableBoard = () => {
+    boardDiv.querySelectorAll(".field").forEach((cell) => {
+      cell.style.pointerEvents = "auto";
+    });
   };
   boardDiv.addEventListener("click", clickHandlerBoard);
   restartButton.addEventListener("click", restartGame);
+  document
+    .getElementById("close-dialog")
+    .addEventListener("click", closeDialog);
   updateScreen();
 }
 screenController();

@@ -37,7 +37,7 @@ body {
     margin: 2rem;
     padding-bottom: 2rem;
     p {
-      font-size: 1.3rem;
+      font-size: 3rem;
       font-weight: 300;
     }
   }
@@ -68,12 +68,15 @@ body {
     justify-content: center;
     align-items: center;
     width: 125px;
-    font-size: 2rem;
+    font-size: 3rem;
+  }
+  .field:hover{
+    background-color: wheat;
+    transition: .2s;
   }
   .restart-button {
     margin: 2rem;
     padding: 10px 20px;
-    /* border: 3px solid var(--color1); */
     border: none;
     border-radius: 7px;
     background-color: var(--button-hover-background);
@@ -83,6 +86,39 @@ body {
   .restart-button:hover {
     background-color: var(--button-active-background);
   }
+}
+dialog[open] {
+  margin: 35vh auto;
+  border: 0;
+  padding: 2.5rem 5rem;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  p {
+    padding: .5rem;
+    font-size: 1.3rem;
+    color: var(--button-active-background);
+  }
+  .wrapper{
+    padding: 1rem;
+  }
+  button{
+    margin: 1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 7px;
+    background-color: var(--button-hover-background);
+    color: white;
+    font-size: 1rem;
+  }
+  button:hover {
+    background-color: var(--button-active-background);
+  }
+}
+dialog::backdrop {
+  background: rgba(41, 41, 9, 0.4);
 }
 footer {
   position: absolute;
