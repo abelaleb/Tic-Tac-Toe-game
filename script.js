@@ -158,9 +158,10 @@ function gameController( // Flow and state of the game's turns, as well as if an
 }
 
 function screenController() {
-  const game = gameController();
+  let game = gameController();
   const playerTurnDiv = document.querySelector("#message");
   const boardDiv = document.querySelector(".board");
+  const restartButton = document.querySelector("#restart-button");
 
   const updateScreen = () => {
     const board = game.getBoard(); //new version of the board and player turn
@@ -178,12 +179,17 @@ function screenController() {
   const clickHandlerBoard = (e) => {
     const selectedField = e.target;
     const index = parseInt(selectedField.dataset.index);
-    const row = Math.floor(index/3);
-    const column = index%3;
-    game.playRound(column,row);
+    const row = Math.floor(index / 3);
+    const column = index % 3;
+    game.playRound(column, row);
+    updateScreen();
+  };
+  const restartGame = () => {
+    game = gameController();
     updateScreen();
   };
   boardDiv.addEventListener("click", clickHandlerBoard);
+  restartButton.addEventListener("click", restartGame);
   updateScreen();
 }
 screenController();

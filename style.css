@@ -34,8 +34,8 @@ body {
 .container {
   text-align: center;
   .message {
-    padding-bottom: 1rem;
-
+    margin: 2rem;
+    padding-bottom: 2rem;
     p {
       font-size: 1.3rem;
       font-weight: 300;
@@ -64,7 +64,11 @@ body {
   }
   .field {
     background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 125px;
+    font-size: 2rem;
   }
   .restart-button {
     margin: 2rem;
